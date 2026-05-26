@@ -1031,13 +1031,109 @@ main.main .title {
   text-shadow: 0 1px 8px rgba(0,0,0,.5) !important;
   background: transparent !important;
 }
-/* Section labels above the form ("Contact us") read on dark too */
+/* Section labels above the form ("Contact us") read on dark too. Note the
+   contact section uses h2.title-h2 (venue uses h2.title). */
 .contact-form-outer-wrapper h1,
 .contact-form-outer-wrapper h2,
 .contact-form-inner-wrapper h1,
-.contact-form-inner-wrapper h2 {
+.contact-form-inner-wrapper h2,
+.title-h2,
+h2.title-h2,
+bt-contact-us-component h2 {
   color: #fff !important;
   text-shadow: 0 2px 16px rgba(0,0,0,.45) !important;
+}
+
+/* Contact form "Send" / submit button — Blackthorn renders a navy Material
+   raised button (.send-button) which is invisible on the dark hero. Make it
+   the amber accent so it stands out, and keep it visible while disabled. */
+.send-button,
+button.send-button,
+.contact-form .send-button,
+.button-group .send-button,
+.button-group button[type="submit"],
+form button[type="submit"].send-button {
+  background: var(--bt-accent) !important;
+  background-color: var(--bt-accent) !important;
+  color: #fff !important;
+  border: 1px solid var(--bt-accent) !important;
+  border-radius: var(--bt-radius-sm) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .14em !important;
+  font-family: var(--bt-font-body) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  padding: 16px 44px !important;
+  box-shadow: 0 6px 20px -6px rgba(0,0,0,.5) !important;
+  opacity: 1 !important;
+}
+.send-button:hover,
+button.send-button:hover {
+  background: var(--bt-accent-2) !important;
+  border-color: var(--bt-accent-2) !important;
+}
+/* Disabled state (form incomplete) — dimmed amber, still clearly visible */
+.send-button[disabled],
+.send-button.mat-button-disabled,
+button.send-button.mat-button-disabled {
+  background: rgba(200,122,58,.55) !important;
+  background-color: rgba(200,122,58,.55) !important;
+  color: rgba(255,255,255,.85) !important;
+  border-color: transparent !important;
+}
+
+/* Section dividers — Blackthorn's <bt-divider> renders a .line + round .dot.
+   Refine into a subtle hairline with a small amber diamond instead of the
+   default dot. These sit on the dark hero, so the line is a light hairline. */
+.bt-divider .primary,
+.bt-divider .bt-divider {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  max-width: 380px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.bt-divider .line {
+  background: rgba(255,255,255,.22) !important;
+  height: 1px !important;
+}
+.bt-divider .dot {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  background: var(--bt-accent) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  transform: rotate(45deg) !important;
+  box-shadow: none !important;
+  margin: 0 3px !important;
+}
+
+/* Location pin + calendar icons before the venue/date in the hero metadata.
+   Injected as masked ::before pseudo-elements so they pick up the white text
+   color (currentColor) automatically. Address is .event-where-when .venue
+   (scoped so it doesn't hit the .section.venue map block); date is .event-date. */
+.event-where-when .venue::before {
+  content: "";
+  display: inline-block;
+  width: 15px; height: 15px;
+  margin-right: 9px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>") center/contain no-repeat;
+}
+.event-date-container .event-date::before,
+.event-date::before {
+  content: "";
+  display: inline-block;
+  width: 15px; height: 15px;
+  margin-right: 9px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") center/contain no-repeat;
 }
 
 /* Header logo — Blackthorn's header has no logo slot, so inject the UVA mark
@@ -1072,7 +1168,7 @@ header.navbar,
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/26/2026, 10:56:17 AM
+   USER CUSTOMIZATIONS — generated 5/26/2026, 12:33:03 PM
    ============================================================================ */
 :root {
   --bt-navy:          #1a2540;
