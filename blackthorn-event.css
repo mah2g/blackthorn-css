@@ -834,6 +834,18 @@ main.main h1.event-name {
   background: transparent !important;
 }
 
+/* Reorder: show the DATE before the LOCATION. .event-where-when is a flex
+   container, so flex `order` swaps them without touching the DOM. */
+.event-where-when {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.event-where-when .event-date-container,
+.event-where-when .event-date { order: 1 !important; }
+.event-where-when .venue { order: 2 !important; }
+
 /* Share / register button — Blackthorn renders an Angular Material button
    with class .social-button (and a stack of mdc-button + mat-mdc-* classes).
    Target both the wrapper-scoped selector and the class directly. */
@@ -1168,7 +1180,7 @@ header.navbar,
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/26/2026, 12:37:53 PM
+   USER CUSTOMIZATIONS — generated 5/26/2026, 2:09:38 PM
    ============================================================================ */
 :root {
   --bt-navy:          #1a2540;
