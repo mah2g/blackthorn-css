@@ -955,6 +955,29 @@ html body .event-description .content p[style] {
   color: rgba(255,255,255,.92) !important;
 }
 
+/* Normalize the rich-text editor's inline formatting. When you paste text into
+   Blackthorn's editor it wraps things in <strong>, <em>, <span style=...> etc.
+   This forces every nested element back to uniform body copy so the editor's
+   formatting can't fight the design. (If you ever WANT a bold lead-in, remove
+   the font-weight line and bold it in the editor.) */
+html body .event-description *,
+html body .event-description strong,
+html body .event-description b,
+html body .event-description em,
+html body .event-description i,
+html body .event-description u,
+html body .event-description span,
+html body .event-description .content,
+html body .event-description .content * {
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-family: var(--bt-font-body) !important;
+  color: rgba(255,255,255,.92) !important;
+  background: transparent !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
 /* Questions form (when present) — breaks out of the hero treatment into a
    light card so form fields are legible. */
 .event-questions-form {
@@ -1026,6 +1049,47 @@ main.main h2,
 main.main .title {
   color: #fff !important;
   text-shadow: 0 2px 16px rgba(0,0,0,.45) !important;
+}
+
+/* Venue map-section card — Blackthorn renders venue details in a LIGHT card:
+   .event-location (card) > .event-location-details > .event-location-name (h3)
+   + .event-location-address, plus an .actions block. The global "white text on
+   the dark hero" rules bleed in here and turn the address white-on-white. Force
+   a readable light card with dark text. The "Venue" h2 above stays white because
+   it sits on the hero, not inside this card. */
+html body .event-location,
+html body .event-location-details {
+  background: var(--bt-paper) !important;
+  border-radius: var(--bt-radius-md) !important;
+}
+html body .event-location {
+  padding: 24px 28px !important;
+  border: 1px solid var(--bt-rule) !important;
+  box-shadow: 0 18px 44px -22px rgba(0,0,0,.55) !important;
+}
+html body .event-location-name,
+html body .event-location-name *,
+html body .event-location-details h3,
+html body .event-location-details h3 * {
+  color: var(--bt-navy) !important;
+  font-family: var(--bt-font-display) !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+html body .event-location-address,
+html body .event-location-address *,
+html body .event-location-details .event-location-address {
+  color: var(--bt-ink-soft) !important;
+  font-family: var(--bt-font-body) !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+/* Directions / map action links inside the card — amber on the light card */
+html body .event-location .actions a,
+html body .event-location .actions button {
+  color: var(--bt-accent) !important;
+  text-shadow: none !important;
 }
 
 /* Contact form labels — white so they're legible on the dark hero. The label
@@ -1224,7 +1288,7 @@ header nav a[aria-selected="true"] {
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/26/2026, 2:46:28 PM
+   USER CUSTOMIZATIONS — generated 5/26/2026, 3:26:32 PM
    ============================================================================ */
 :root {
   --bt-navy:          #1a2540;
@@ -1360,7 +1424,7 @@ div.social-button,
   flex-shrink: 0 !important;
 }
 .event-where-when .venue::after {
-  content: "Pavilion VIII, The Lawn\00000ACharlottesville, Virginia, 22903" !important;
+  content: "Pavilion VIII, The Lawn\00000ACharlottesville, VA 22903" !important;
   white-space: pre-line !important;
   text-align: center !important;
   font-family: var(--bt-font-body) !important;
