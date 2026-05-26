@@ -1168,7 +1168,7 @@ header.navbar,
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/26/2026, 12:33:03 PM
+   USER CUSTOMIZATIONS — generated 5/26/2026, 12:37:53 PM
    ============================================================================ */
 :root {
   --bt-navy:          #1a2540;
@@ -1212,6 +1212,23 @@ main.main {
   background-size: cover !important;
   background-position: center !important;
 }
+
+/* Hide share buttons (invite-only event) — covers preview's mock DOM
+   AND the production share. Blackthorn renders the share control as
+   .social-button (a <div> in the header, a <button> in the hero), so target
+   the class on ANY element, not just buttons. */
+header button[aria-label*="share" i],
+.bt-share-button,
+.share-button,
+.hero-share,
+.event-name-section button,
+.bt-event-name button,
+.btn-wrapper,
+.btn-wrapper button,
+.social-button,
+div.social-button,
+.navbar-content .social-button,
+.event-details-container .btn-wrapper { display: none !important; }
 
 /* Description hoist — overlay the body description onto the hero so it
    reads alongside the title. Targets common Blackthorn description wrappers.
