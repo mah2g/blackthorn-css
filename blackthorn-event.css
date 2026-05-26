@@ -967,11 +967,16 @@ html body .event-description em,
 html body .event-description i,
 html body .event-description u,
 html body .event-description span,
+html body .event-description span[style],
+html body .event-description [style],
 html body .event-description .content,
-html body .event-description .content * {
+html body .event-description .content *,
+html body .event-description .content [style] {
   font-weight: 400 !important;
   font-style: normal !important;
   font-family: var(--bt-font-body) !important;
+  font-size: 16px !important;       /* beats the editor's inline font-size (e.g. 14px spans) */
+  line-height: 1.65 !important;
   color: rgba(255,255,255,.92) !important;
   background: transparent !important;
   letter-spacing: 0 !important;
@@ -1288,7 +1293,7 @@ header nav a[aria-selected="true"] {
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/26/2026, 3:26:32 PM
+   USER CUSTOMIZATIONS — generated 5/26/2026, 3:34:28 PM
    ============================================================================ */
 :root {
   --bt-navy:          #1a2540;
