@@ -1463,7 +1463,7 @@ header nav a[aria-selected="true"] {
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/28/2026, 1:10:55 PM
+   USER CUSTOMIZATIONS — generated 5/28/2026, 1:57:54 PM
    ============================================================================ */
 :root {
   --bt-navy:          #232D4B;
@@ -1479,7 +1479,7 @@ header nav a[aria-selected="true"] {
   --bt-font-body:     'Inter', system-ui, sans-serif;
   --bt-font-script:   'Caveat', 'Brush Script MT', cursive;
   --bt-radius-sm:     2px;
-  --bt-hero-min-h:    90vh;
+  --bt-hero-min-h:    86vh;
   --bt-hero-scrim:    linear-gradient(180deg, rgba(15,22,38,0.36) 0%, rgba(15,22,38,0.75) 100%);
   --bt-hero-logo-display: none;
   --bt-hero-logo-h:   64px;
