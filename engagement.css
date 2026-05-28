@@ -861,7 +861,7 @@ bt-master-event-ui-preview-header {
    background-image (with built-in scrim) on this selector too. */
 main.main {
   position: relative !important;
-  min-height: 100vh !important;
+  min-height: var(--bt-hero-min-h, 100vh) !important;
   max-width: none !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -881,7 +881,7 @@ main.main > .linear-background {
 main.main > .event-details {
   position: relative !important;
   z-index: 2 !important;
-  min-height: 100vh !important;
+  min-height: var(--bt-hero-min-h, 100vh) !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -1013,6 +1013,22 @@ button.round-social-button,
   min-width: 0 !important;
   height: auto !important;
   line-height: 1.4 !important;
+}
+/* Neutralize the outer .social-button WRAPPER (the <div> Blackthorn nests around
+   the actual share <button>: div.social-button > bt-social-sharing > button).
+   It carries Blackthorn's border + width:100%, which rendered as a second box
+   around the orange chip. Reset it to a bare container so only the inner
+   <button> shows. Targets the DIV specifically (not the button). */
+div.social-button,
+.social-button:not(button):not(.mdc-button) {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  display: inline-flex !important;
+  justify-content: center !important;
 }
 .btn-wrapper button:hover,
 .btn-wrapper a:hover,
@@ -1447,7 +1463,7 @@ header nav a[aria-selected="true"] {
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 5/27/2026, 1:31:34 PM
+   USER CUSTOMIZATIONS — generated 5/28/2026, 1:10:55 PM
    ============================================================================ */
 :root {
   --bt-navy:          #232D4B;
@@ -1463,7 +1479,7 @@ header nav a[aria-selected="true"] {
   --bt-font-body:     'Inter', system-ui, sans-serif;
   --bt-font-script:   'Caveat', 'Brush Script MT', cursive;
   --bt-radius-sm:     2px;
-  --bt-hero-min-h:    86vh;
+  --bt-hero-min-h:    90vh;
   --bt-hero-scrim:    linear-gradient(180deg, rgba(15,22,38,0.36) 0%, rgba(15,22,38,0.75) 100%);
   --bt-hero-logo-display: none;
   --bt-hero-logo-h:   64px;
