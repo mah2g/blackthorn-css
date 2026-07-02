@@ -1,0 +1,1637 @@
+
+/* ============================================================================
+   Blackthorn Events — "Dynamic" Template Override
+   ----------------------------------------------------------------------------
+   Drop this into Blackthorn's stylesheet field. All visual choices live in
+   CSS variables at the top — change those to rebrand without touching the
+   rest of the file.
+
+   Selectors are written defensively. Many target multiple plausible class
+   names because Blackthorn's class structure varies by app version. If a
+   block doesn't take effect on your event, inspect the live DOM and add the
+   real selector to the comma-list at the top of that block.
+   ============================================================================ */
+
+/* ----- 1. Fonts -----
+   Engagement template leans on a heavy condensed sans (Franklin Gothic
+   substitute — Oswald / Barlow Condensed / Anton on Google Fonts) for the big
+   stacked all-caps headlines that define UVA Clubs / Athletics moments.
+   Inter remains the body font. A script face (Caveat) is loaded for the
+   optional handwritten accent tagline ("Game Watch"-style). */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&display=swap');
+
+/* ----- 2. Design tokens ----- */
+:root {
+  /* Brand — UVA navy + signature orange, warm paper neutrals */
+  --bt-navy:        #232D4B;   /* UVA primary navy */
+  --bt-navy-2:      #1a2238;   /* darker navy for scrims */
+  --bt-accent:      #E57200;   /* UVA orange */
+  --bt-accent-2:    #cc6600;   /* accent hover */
+  --bt-cream:       #FAFAF8;   /* warm page background */
+  --bt-paper:       #ffffff;   /* card surface */
+  --bt-ink:         #232D4B;   /* primary text */
+  --bt-ink-soft:    #4a5570;   /* secondary text */
+  --bt-rule:        #e7e3da;   /* hairline color */
+
+  /* Type — engagement template uses a heavy condensed sans for headlines
+     (Franklin Gothic substitute), Inter for body, and an optional script
+     for the accent tagline. The condensed face is what defines this
+     template visually. */
+  --bt-font-display: 'Montserrat', 'Archivo', 'Franklin Gothic', 'Helvetica Neue', sans-serif;
+  --bt-font-secondary: 'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --bt-font-date:    'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --bt-font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --bt-font-script:  'Caveat', 'Brush Script MT', cursive;
+
+  /* Radii / spacing — engagement template is mostly sharp (sharper than the
+     formal template) for that bold sports-poster feel. */
+  --bt-radius-sm: 2px;
+  --bt-radius-md: 4px;
+  --bt-radius-lg: 8px;
+  --bt-radius-pill: 999px;
+
+  /* Hero */
+  --bt-hero-min-h: 86vh;
+  --bt-hero-scrim: linear-gradient(180deg, rgba(24,22,28,.35) 0%, rgba(24,22,28,.68) 100%);
+
+  /* Engagement-specific: badge accent under the headline (the orange tag
+     block in the UVA Clubs / Cavaliers Care / Summer Socials posters). */
+  --bt-tag-text: "";
+  --bt-tag-display: none;
+}
+
+/* ============================================================================
+   3. Page-level resets
+   ============================================================================ */
+html, body,
+app-root, .bt-event, .event-page, .splash-page-content {
+  background: var(--bt-cream) !important;
+  color: var(--bt-ink);
+  font-family: var(--bt-font-body);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ============================================================================
+   4. Top navigation bar
+   Targets: Blackthorn's header with back-arrow + tabs (Ticket / Venue / Contact us) + Share
+   ============================================================================ */
+header,
+.bt-event-header,
+.event-header,
+nav[role="navigation"]:first-of-type,
+.navigation-bar,
+.top-nav {
+  background: var(--bt-navy) !important;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  box-shadow: 0 1px 0 rgba(0,0,0,.04);
+  height: 76px;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+/* Nav block fills the middle (1fr) column and centers its tabs inside it
+   so the tabs never push against the logo on the left or share on the right. */
+header > nav,
+.bt-event-header > nav,
+.bt-tabs {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+/* Logo image slot — sized to fit the header bar */
+.bt-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none !important;
+  color: inherit;
+}
+.bt-logo img,
+.bt-logo-img,
+.event-logo img,
+.event-logo-img {
+  height: 44px;
+  width: auto;
+  max-width: 240px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Back arrow */
+header button[aria-label*="back" i],
+header .back-button,
+.bt-back-button {
+  color: #fff !important;
+  background: transparent !important;
+  border-radius: var(--bt-radius-pill);
+  width: 40px; height: 40px;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background .18s ease;
+}
+header button[aria-label*="back" i]:hover,
+.bt-back-button:hover {
+  background: rgba(255,255,255,.08) !important;
+}
+
+/* Nav tabs (Ticket / Venue / Contact us) — converted to pill chips */
+header nav a,
+header nav button,
+.bt-tab,
+.nav-item,
+.event-tab {
+  color: rgba(255,255,255,.72) !important;
+  font-family: var(--bt-font-body);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: .02em;
+  padding: 9px 18px !important;
+  border-radius: var(--bt-radius-pill);
+  text-decoration: none !important;
+  border: none !important;
+  background: transparent !important;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all .2s ease;
+}
+header nav a:hover,
+.bt-tab:hover,
+.nav-item:hover {
+  color: #fff !important;
+  background: rgba(255,255,255,.08) !important;
+}
+header nav a[aria-selected="true"],
+header nav a.active,
+.bt-tab.active,
+.bt-tab--selected,
+.nav-item.active {
+  color: var(--bt-navy) !important;
+  background: var(--bt-cream) !important;
+}
+
+/* Share button (top-right pill) */
+header button[aria-label*="share" i],
+.bt-share-button,
+.share-button {
+  color: #fff !important;
+  background: transparent !important;
+  border: 1px solid rgba(255,255,255,.28) !important;
+  border-radius: var(--bt-radius-pill);
+  padding: 8px 18px !important;
+  font-family: var(--bt-font-body);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  transition: all .2s ease;
+}
+header button[aria-label*="share" i]:hover,
+.bt-share-button:hover {
+  background: var(--bt-accent) !important;
+  border-color: var(--bt-accent) !important;
+}
+
+/* ============================================================================
+   5. Event hero — full-bleed image w/ scrim + centered title overlay
+   ============================================================================ */
+.bt-event-banner,
+.event-banner,
+.event-hero,
+.hero-image-container,
+section.banner,
+[class*="banner"]:not([class*="banner-message"]) {
+  position: relative;
+  min-height: var(--bt-hero-min-h);
+  background-size: cover !important;
+  background-position: center !important;
+  background-color: var(--bt-navy);
+  margin: 0 !important;
+}
+
+.bt-event-banner::after,
+.event-banner::after,
+.event-hero::after,
+.hero-image-container::after,
+section.banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--bt-hero-scrim);
+  pointer-events: none;
+}
+
+.bt-event-banner img,
+.event-banner img,
+.event-hero img,
+.hero-image-container img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+/* Pull the event title block UP, over the hero image, centered.
+   Engagement template uses a slightly tighter stack (gap 14px) so the
+   massive condensed headline reads as a single block with its eyebrow,
+   tag, and metadata. */
+.bt-event-name,
+.event-title-block,
+.event-name-section,
+.bt-event-title-wrap {
+  position: relative;
+  z-index: 2;
+  margin-top: calc(-1 * var(--bt-hero-min-h) + 10vh);
+  padding: 0 24px 8vh;
+  text-align: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Optional hero logo — rendered as a ::before pseudo-element above the headline.
+   Toggled by --bt-hero-logo-display (none by default; set to block to show).
+   The image URL comes from --bt-hero-logo-url and the height from
+   --bt-hero-logo-h. Tweak panel controls these vars at runtime; the export
+   bakes them into :root. */
+.bt-event-name::before,
+.event-name-section::before,
+.event-title-block::before,
+.bt-event-title-wrap::before {
+  content: "";
+  display: var(--bt-hero-logo-display, none);
+  width: 100%;
+  height: var(--bt-hero-logo-h, 64px);
+  background-image: var(--bt-hero-logo-url, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Headline — the engagement template's centerpiece. Massive condensed
+   all-caps sans, tight line-height so multi-line stacks read as one
+   monolithic block (UVA Clubs / March Madness / Summer Socials
+   treatment). Letter-spacing slightly opened to feel signage-y. */
+.bt-event-name h1,
+h1.event-name,
+.event-title,
+.event-name-section h1 {
+  font-family: var(--bt-font-display) !important;
+  font-style: normal;
+  font-weight: 700;
+  font-size: clamp(64px, 10vw, 144px);
+  line-height: .92;
+  letter-spacing: .005em;
+  text-transform: uppercase;
+  color: #fff !important;
+  margin: 0;
+  text-shadow: 0 2px 28px rgba(0,0,0,.35);
+  max-width: 14ch;
+  text-wrap: balance;
+}
+
+/* When the headline contains an inline "accent" word (the marketing trick
+   from the ACC Tournament + Summer Socials posters — one word in orange,
+   the rest white), wrap that word in <em> in the source and it picks up
+   the orange paint automatically. <em> here is purely a marker; we strip
+   italic ourselves. */
+.bt-event-name h1 em,
+h1.event-name em,
+.event-name-section h1 em,
+.event-title em {
+  color: var(--bt-accent) !important;
+  font-style: normal !important;
+  font-weight: inherit !important;
+  display: inline-block;
+}
+
+/* Eyebrow above the headline — small condensed all-caps line ("MEN'S
+   BASKETBALL" above SECOND ROUND, "UVA CLUBS" above CAVALIERS CARE).
+   Targets a plain <p class="event-eyebrow"> in the source so it can be
+   added or removed per event. */
+.event-eyebrow,
+.bt-event-eyebrow {
+  font-family: var(--bt-font-secondary) !important;
+  font-weight: 400 !important;
+  font-size: clamp(14px, 1.4vw, 20px) !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  opacity: .9;
+  margin: 0 !important;
+  text-shadow: 0 1px 12px rgba(0,0,0,.4);
+}
+
+/* Script accent line under the headline — "Game Watch" style. Wrap in
+   <p class="event-script"> in source. */
+.event-script,
+.bt-event-script {
+  font-family: var(--bt-font-script) !important;
+  font-weight: 700 !important;
+  font-size: clamp(32px, 4.5vw, 56px) !important;
+  font-style: italic !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #fff !important;
+  margin: -4px 0 0 !important;
+  text-shadow: 0 2px 16px rgba(0,0,0,.35);
+  line-height: 1;
+}
+
+/* Orange TAG badge under the headline — the bold orange rectangle with
+   condensed white type from the Cavaliers Care / Summer Socials posters.
+   Wrap a span <span class="event-tag"> in the source, or set it through
+   the Tweak "Tag text" + Tweak toggle to inject via CSS var. */
+.event-tag,
+.bt-event-tag {
+  display: inline-block;
+  background: var(--bt-accent);
+  color: #fff !important;
+  font-family: var(--bt-font-display);
+  font-weight: 700;
+  font-size: clamp(16px, 1.8vw, 26px);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 10px 22px 8px;
+  border-radius: 0;
+  margin: 4px auto 0;
+  text-shadow: none;
+  line-height: 1;
+  box-shadow: 0 6px 18px -8px rgba(0,0,0,.5);
+}
+
+/* Burst-mark accents — small orange tick fans around the headline (the
+   UVA Kitchen Towels "sparkle" marks). Two pseudo positions, opt-in via
+   --bt-bursts: 1 on :root. Hidden by default. */
+.bt-event-name[data-bursts="1"]::after,
+.event-name-section[data-bursts="1"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' fill='none' stroke='%23E57200' stroke-width='5' stroke-linecap='round'><line x1='40' y1='10' x2='40' y2='28'/><line x1='14' y1='22' x2='28' y2='34'/><line x1='66' y1='22' x2='52' y2='34'/></svg>"),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 80' fill='none' stroke='%23E57200' stroke-width='5' stroke-linecap='round'><line x1='40' y1='10' x2='40' y2='28'/><line x1='14' y1='22' x2='28' y2='34'/><line x1='66' y1='22' x2='52' y2='34'/></svg>");
+  background-repeat: no-repeat;
+  background-position: 8% 22%, 92% 28%;
+  background-size: 64px 64px, 56px 56px;
+  transform: scale(1);
+  opacity: .9;
+}
+
+/* Address line + datetime under the title — condensed sans, lightly
+   tracked, all caps. Reads as event signage metadata under the big
+   headline block. */
+.bt-event-address,
+.event-address,
+.event-location,
+.event-name-section p,
+.event-datetime {
+  font-family: var(--bt-font-display);
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.94) !important;
+  margin: 0;
+}
+
+/* Small dot/spacer between address and date */
+.event-name-section p + p::before {
+  content: "·";
+  display: inline-block;
+  margin: 0 12px;
+  opacity: .6;
+}
+
+/* Share button when it appears in the hero — solid orange chip instead
+   of the ghost outline, so it feels celebratory not contemplative. */
+.bt-event-name button,
+.event-name-section button,
+.hero-share {
+  margin-top: 18px;
+  background: var(--bt-accent) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: var(--bt-radius-sm);
+  padding: 14px 32px !important;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-family: var(--bt-font-display) !important;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 22px -10px rgba(0,0,0,.5);
+  transition: background .15s ease, transform .15s ease;
+}
+.bt-event-name button:hover,
+.hero-share:hover {
+  background: var(--bt-accent-2) !important;
+  transform: translateY(-1px);
+}
+
+/* Hero description — body copy overlaid on the hero, below the title block.
+   Overrides the uppercase tracked-out treatment used for the address/datetime
+   lines (the broad .event-name-section p selector above) so this reads as
+   flowing body copy. */
+.bt-event-name .hero-description,
+.bt-event-name .event-description,
+.event-name-section .hero-description,
+.event-name-section .event-description {
+  font-family: var(--bt-font-body) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: rgba(255,255,255,.88) !important;
+  max-width: 58ch;
+  margin: 20px auto 0 !important;
+  text-wrap: pretty;
+  text-shadow: 0 1px 12px rgba(0,0,0,.35);
+}
+
+/* ============================================================================
+   6. Body sections — generic container
+   ============================================================================ */
+main,
+.bt-event-body,
+.event-body,
+.event-content,
+.event-page-content {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 80px 32px;
+  background: transparent;
+}
+
+section,
+.bt-section,
+.event-section {
+  padding: 64px 0;
+}
+
+/* Section headings (e.g., "Venue", "Contact us") — condensed all-caps,
+   navy, with an orange underline accent for a stadium-banner feel. */
+section h2,
+.bt-section h2,
+.bt-section-title,
+.event-section h2 {
+  font-family: var(--bt-font-display) !important;
+  font-weight: 700;
+  font-style: normal;
+  font-size: clamp(36px, 4.5vw, 64px);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--bt-navy) !important;
+  margin: 0 0 18px;
+  text-wrap: balance;
+  position: relative;
+  padding-bottom: 14px;
+}
+section h2::after,
+.bt-section h2::after,
+.bt-section-title::after,
+.event-section h2::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 4px;
+  background: var(--bt-accent);
+}
+
+section h2 + p,
+.bt-section-title + p,
+.bt-section-subtitle {
+  text-align: center;
+  color: var(--bt-ink-soft) !important;
+  font-family: var(--bt-font-secondary) !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
+  font-style: italic !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  margin: 18px 0 48px;
+}
+
+/* Body copy */
+section p,
+.bt-section p,
+.event-description {
+  font-family: var(--bt-font-body);
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--bt-ink-soft);
+  max-width: 62ch;
+  margin-left: auto;
+  margin-right: auto;
+  text-wrap: pretty;
+}
+
+/* ============================================================================
+   7. Section divider — chunky orange ticks flanking a center square. Stadium
+   signage feel rather than the formal template's diamond ornament.
+   ============================================================================ */
+.bt-section-divider,
+.section-divider,
+hr,
+.event-divider {
+  border: 0 !important;
+  margin: 56px auto !important;
+  width: 100%;
+  max-width: 520px;
+  height: 14px;
+  background: transparent !important;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+.bt-section-divider > *,
+.section-divider > * { display: none; }
+.bt-section-divider::before,
+.bt-section-divider::after,
+.section-divider::before,
+.section-divider::after,
+hr::before, hr::after {
+  content: "";
+  flex: 1;
+  height: 4px;
+  background: var(--bt-accent) !important;
+  background-image: none !important;
+  align-self: center;
+}
+/* Center square — drawn as a background-image on the divider, showing
+   through the flex gap between the two ::before/::after ticks. */
+.bt-section-divider,
+.section-divider,
+hr {
+  background-image:
+    linear-gradient(var(--bt-accent), var(--bt-accent)) !important;
+  background-size: 14px 14px !important;
+  background-repeat: no-repeat !important;
+  background-position: center center !important;
+}
+
+/* First divider after the hero needs extra breathing room up top so it doesn't
+   crowd the section transition below the hero band. Covers the preview mock's
+   first <hr> and production's first bt-divider. */
+.bt-event-body > hr:first-of-type,
+.bt-event-body > .bt-section-divider:first-of-type,
+.bt-event-body > .section-divider:first-of-type,
+main.main .bt-divider:first-of-type {
+  margin-top: 104px !important;
+}
+
+/* ============================================================================
+   8. Venue / map block
+   ============================================================================ */
+.bt-venue-card,
+.venue-card,
+.event-venue-card,
+.venue-info {
+  background: var(--bt-paper);
+  border: 1px solid var(--bt-rule);
+  border-radius: var(--bt-radius-md);
+  padding: 24px 28px;
+  box-shadow: 0 1px 0 rgba(26,37,64,.04), 0 8px 24px -16px rgba(26,37,64,.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 760px;
+  margin: 0 auto 32px;
+}
+
+.bt-venue-card .venue-name,
+.venue-card h3,
+.venue-card .name {
+  font-family: var(--bt-font-display);
+  font-weight: 700;
+  font-size: 24px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--bt-navy);
+  margin: 0 0 4px;
+}
+.bt-venue-card .venue-address,
+.venue-card .address {
+  font-size: 14px;
+  color: var(--bt-ink-soft);
+  margin: 0;
+}
+
+/* Map */
+.bt-map,
+.venue-map,
+.map-container,
+[class*="map"] iframe,
+[class*="map"] > div:first-child {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: var(--bt-radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--bt-rule);
+  box-shadow: 0 24px 48px -24px rgba(26,37,64,.25);
+}
+
+/* ============================================================================
+   9. Buttons (Get Directions, View Large Map, Register, etc.)
+   ============================================================================ */
+button,
+.bt-button,
+.button,
+a.button,
+.btn-primary,
+input[type="submit"] {
+  font-family: var(--bt-font-display);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: var(--bt-radius-sm);
+  border: 0;
+  background: var(--bt-accent);
+  color: #fff;
+  cursor: pointer;
+  transition: all .15s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+button:hover,
+.bt-button:hover,
+.button:hover,
+.btn-primary:hover {
+  background: var(--bt-accent-2);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+/* Outline variant (e.g. "View Large Map") */
+.bt-button--outline,
+.button--outline,
+.btn-secondary,
+a.link-button {
+  background: transparent !important;
+  color: var(--bt-navy) !important;
+  border: 2px solid var(--bt-navy) !important;
+}
+.bt-button--outline:hover,
+.button--outline:hover {
+  background: var(--bt-navy) !important;
+  color: #fff !important;
+}
+
+/* Text links in the venue card (e.g. "View Large Map") get amber text — but
+   NOT the filled .button ("Get Directions"), which must keep its white label on
+   the orange fill. Excluding .button stops the orange-on-orange invisibility. */
+.venue-card a:not(.button):not(.bt-button),
+.bt-venue-card a:not(.button):not(.bt-button) {
+  color: var(--bt-accent);
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color .2s;
+}
+/* Filled buttons in the venue card always keep white text. */
+.venue-card a.button,
+.venue-card .button,
+.bt-venue-card a.button,
+.bt-venue-card .button {
+  color: #fff !important;
+}
+.venue-card a:hover { border-bottom-color: var(--bt-accent); }
+
+/* ============================================================================
+   10. Contact form
+   ============================================================================ */
+form,
+.bt-form,
+.contact-form,
+.event-form {
+  max-width: 720px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 20px;
+}
+
+form > *:has(textarea),
+.contact-form .field-textarea,
+.bt-form .full-width {
+  grid-column: 1 / -1;
+}
+
+label,
+.bt-form-label,
+.contact-form label {
+  display: block;
+  font-family: var(--bt-font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--bt-ink);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+input[type="url"],
+textarea,
+select,
+.bt-input,
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: var(--bt-font-body);
+  font-size: 15px;
+  color: var(--bt-ink);
+  background: var(--bt-paper) !important;
+  border: 1px solid var(--bt-rule) !important;
+  border-radius: var(--bt-radius-sm);
+  outline: none;
+  transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+input:focus, textarea:focus, select:focus,
+.bt-input:focus {
+  border-color: var(--bt-accent) !important;
+  box-shadow: 0 0 0 3px rgba(200,122,58,.16) !important;
+}
+
+textarea { min-height: 140px; resize: vertical; }
+
+/* Required asterisk */
+.required, .asterisk { color: var(--bt-accent) !important; }
+
+/* Form submit button — full width, prominent */
+form button[type="submit"],
+.bt-form-submit,
+.contact-form button {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin-top: 16px;
+  padding: 18px;
+  font-size: 14px;
+}
+
+/* ============================================================================
+   11. Footer / archive ribbon
+   ============================================================================ */
+.archive-ribbon,
+footer .archive {
+  background: var(--bt-navy);
+  color: rgba(255,255,255,.7);
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  padding: 8px 16px;
+  border-radius: var(--bt-radius-sm) 0 0 0;
+}
+
+/* ============================================================================
+   12. Footer
+   ============================================================================ */
+footer,
+.bt-footer,
+.event-footer {
+  background: var(--bt-navy);
+  color: rgba(255,255,255,.65);
+  padding: 48px 32px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 80px;
+}
+footer a {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.3);
+}
+
+/* ============================================================================
+   13. Mobile
+   ============================================================================ */
+@media (max-width: 720px) {
+  header { height: 64px; padding: 0 16px; }
+  header nav a, .bt-tab { padding: 7px 14px !important; font-size: 13px; }
+  :root { --bt-hero-min-h: 60vh; }
+  main, .event-body { padding: 48px 20px; }
+  section, .bt-section { padding: 40px 0; }
+  form, .contact-form { grid-template-columns: 1fr; }
+  .bt-venue-card, .venue-card { flex-direction: column; align-items: flex-start; }
+}
+
+/* ============================================================================
+   14. PRODUCTION TARGETS — staging.events.blackthorn.io (Angular renderer)
+   ----------------------------------------------------------------------------
+   The selectors above target our preview's mock DOM. Blackthorn's actual
+   public renderer uses different class names. These rules target what the
+   real event page renders so the uploaded CSS actually styles production.
+   Inspected from a live UVA sandbox event.
+
+   Real DOM structure:
+     <bt-master-event-ui-preview-header>...</bt-master-event-ui-preview-header>
+     <main class="main">
+       <div class="linear-background"></div>     <-- Blackthorn's own gradient
+       <div class="event-details">
+         <section class="event-details-container">
+           <h1 class="event-name">...</h1>
+           <div class="event-where-when">...</div>
+           <div class="btn-wrapper">...</div>
+           <div class="event-description">...</div>
+         </section>
+         <div class="event-questions-form">...</div>
+       </div>
+     </main>
+   ============================================================================ */
+
+/* Header — Angular custom element wrapping the nav bar */
+bt-master-event-ui-preview-header {
+  display: block;
+  background: var(--bt-navy) !important;
+}
+
+/* The <main> becomes the full hero. The export's heroBg rule sets the
+   background-image (with built-in scrim) on this selector too. */
+main.main {
+  position: relative !important;
+  min-height: 100vh !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: var(--bt-navy) !important;
+  /* NOTE: the hero image is NOT painted here anymore. Painting it on main.main
+     (which contains the ENTIRE page) made it cover the full page height with no
+     way to cap it. Instead it's drawn as a fixed-height BAND via ::before below,
+     so --bt-hero-band actually controls how tall the image is. */
+}
+
+/* Hero image BAND — a fixed-height strip pinned to the top of main.main.
+   Its height is --bt-hero-band (driven by the Hero height slider). The image +
+   scrim live in --bt-hero-image (set by the export). Content sits above it via
+   z-index and flows onto solid navy below the band. At 100vh this looks just
+   like the old full-bleed hero; dial it down for a capped banner. */
+main.main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--bt-hero-band, 100vh);
+  background-color: var(--bt-navy);
+  background-image: var(--bt-hero-image, none);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Hide Blackthorn's built-in linear gradient — we provide our own scrim
+   baked into --bt-hero-image. */
+main.main > .linear-background {
+  display: none !important;
+}
+
+/* Content wrapper — sits above the hero, vertically centered, full viewport
+   so the hero feels intentional and the form (if any) flows below. */
+main.main > .event-details {
+  position: relative !important;
+  z-index: 2 !important;
+  /* The title block occupies (at least) the band height and centers within it,
+     so it sits over the image. Anything beyond the band flows onto navy below.
+     padding-top clears the sticky header so the title never tucks under it. */
+  min-height: var(--bt-hero-band, 100vh) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 96px 24px 6vh !important;
+  margin: 0 !important;
+  text-align: center !important;
+  color: #fff !important;
+  background: transparent !important;
+  max-width: none !important;
+  box-sizing: border-box !important;
+}
+
+/* Inner section that wraps the headline, metadata, share, description.
+   WEEK OF LEARNING signature: a thin orange corner-bracket frame around the
+   hero lockup (from the brand banner). The border is on the container itself so
+   it hugs the content; the ::before/::after are used elsewhere (logo/tag), so
+   the frame is a plain element border — robust, no pseudo collisions. */
+.event-details > .event-details-container,
+.bt-event-name.event-name-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 16px !important;
+  width: 100% !important;
+  max-width: 1080px !important;
+  box-sizing: border-box !important;
+  padding: 40px 64px 44px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  background: transparent !important;
+  border: 1.5px solid var(--bt-accent) !important;
+  border-radius: 2px !important;
+}
+
+/* WEEK OF LEARNING — date rendered in an italic serif (brand banner treatment:
+   "August 17 – 21, 2026"). Overrides the uppercase tracked-out sans the base
+   metadata rules apply. The calendar icon (::before, currentColor mask) is
+   unaffected and still inherits the text color. */
+main.main .event-where-when .event-date,
+main.main .event-date-container .event-date,
+.event-details-container .event-date,
+.event-where-when .event-date,
+.bt-event-name .event-datetime,
+.event-name-section .event-datetime {
+  font-family: var(--bt-font-date, 'Libre Caslon Text', Georgia, serif) !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  font-size: 20px !important;
+  letter-spacing: .02em !important;
+  text-transform: none !important;
+  color: #fff !important;
+}
+
+/* Optional hero logo above the headline — reuses the same CSS vars as the
+   preview's hero logo (.bt-event-name::before above). */
+.event-details-container::before {
+  content: "";
+  display: var(--bt-hero-logo-display, none);
+  width: 100%;
+  height: var(--bt-hero-logo-h, 64px);
+  background-image: var(--bt-hero-logo-url, none);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  margin-bottom: 4px;
+}
+
+/* The headline — applies hero-context white + shadow on top of the font
+   styling the earlier h1.event-name rule already provides. Engagement
+   template overrides: massive condensed all-caps. */
+.event-details-container h1.event-name,
+main.main h1.event-name {
+  color: #fff !important;
+  text-shadow: 0 2px 28px rgba(0,0,0,.35) !important;
+  font-family: var(--bt-font-display) !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  font-size: clamp(64px, 10vw, 144px) !important;
+  line-height: .92 !important;
+  letter-spacing: .005em !important;
+  text-transform: uppercase !important;
+  max-width: 14ch !important;
+  margin: 0 !important;
+  text-wrap: balance !important;
+}
+
+/* Address + datetime block — engagement template uses the condensed display
+   sans for these too (instead of body Inter), so the metadata feels like
+   stadium signage continuous with the headline. */
+.event-where-when,
+.event-where-when *,
+.event-venue,
+.event-venue-container,
+.event-venue *,
+.event-date,
+.event-date-container,
+.event-date * {
+  font-family: var(--bt-font-display) !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  letter-spacing: .16em !important;
+  text-transform: uppercase !important;
+  color: rgba(255,255,255,.94) !important;
+  text-align: center !important;
+  line-height: 1.5 !important;
+}
+.event-where-when,
+.event-venue-container,
+.event-date-container {
+  margin: 0 !important;
+  background: transparent !important;
+}
+
+/* Reorder: show the DATE before the LOCATION. .event-where-when is a flex
+   container, so flex `order` swaps them without touching the DOM. */
+.event-where-when {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+.event-where-when .event-date-container,
+.event-where-when .event-date { order: 1 !important; }
+.event-where-when .venue { order: 2 !important; }
+
+/* Share / register button — engagement template makes this a solid orange
+   chip so it reads as a celebratory CTA, not a contemplative ghost. */
+.btn-wrapper {
+  display: flex !important;
+  gap: 12px !important;
+  justify-content: center !important;
+  margin-top: 18px !important;
+  background: transparent !important;
+}
+.btn-wrapper button,
+.btn-wrapper a,
+.btn-wrapper [role="button"],
+.btn-wrapper .social-button,
+.btn-wrapper .mat-mdc-button,
+button.social-button,
+button.round-social-button,
+.social-button.mat-mdc-raised-button,
+.social-button.mdc-button {
+  background: var(--bt-accent) !important;
+  background-color: var(--bt-accent) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: var(--bt-radius-sm) !important;
+  padding: 14px 32px !important;
+  letter-spacing: .18em !important;
+  text-transform: uppercase !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  font-family: var(--bt-font-display) !important;
+  transition: all .15s ease !important;
+  cursor: pointer !important;
+  box-shadow: 0 8px 22px -10px rgba(0,0,0,.5) !important;
+  min-width: 0 !important;
+  height: auto !important;
+  line-height: 1.4 !important;
+}
+/* Neutralize the outer .social-button WRAPPER (the <div> Blackthorn nests around
+   the actual share <button>: div.social-button > bt-social-sharing > button).
+   It carries Blackthorn's border + width:100%, which rendered as a second box
+   around the orange chip. Reset it to a bare container so only the inner
+   <button> shows. Targets the DIV specifically (not the button). */
+div.social-button,
+.social-button:not(button):not(.mdc-button) {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  width: auto !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+}
+.btn-wrapper button:hover,
+.btn-wrapper a:hover,
+.btn-wrapper .social-button:hover,
+button.social-button:hover {
+  background: var(--bt-accent-2) !important;
+  transform: translateY(-1px);
+}
+/* Material ripple / persistent backgrounds inside the button */
+.btn-wrapper .mat-mdc-button-persistent-ripple,
+.btn-wrapper .mdc-button__ripple,
+.btn-wrapper .mat-mdc-focus-indicator,
+.btn-wrapper .mat-mdc-button-touch-target,
+button.social-button .mat-mdc-button-persistent-ripple,
+button.social-button .mdc-button__ripple {
+  display: none !important;
+  background: transparent !important;
+}
+/* Make sure the icon + label inside the button inherit white */
+.btn-wrapper .mdc-button__label,
+button.social-button .mdc-button__label,
+button.social-button mat-icon,
+button.social-button svg {
+  color: #fff !important;
+  fill: #fff !important;
+}
+
+/* Description — Blackthorn wraps the description text inside
+   <bt-rich-text><div class="content"><p>. Need ultra-specific selectors
+   to outrank Blackthorn's own rich-text component styles. The html-body
+   prefix bumps specificity high enough to beat their internal rules. */
+html body main.main .event-description,
+html body main.main .event-description bt-rich-text,
+html body main.main .event-description bt-rich-text .content,
+html body main.main .event-description .bt-rich-text,
+html body main.main .event-description .bt-rich-text .content,
+html body main.main .event-description bt-rich-text .content p,
+html body main.main .event-description .bt-rich-text .content p,
+html body main.main .event-description .content p,
+html body main.main .event-description p,
+html body .event-details .event-description bt-rich-text .content p,
+html body .event-details .event-description .bt-rich-text .content p,
+html body .event-details .event-description p {
+  font-family: var(--bt-font-body) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 1.65 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: rgba(255,255,255,.92) !important;
+  max-width: 58ch !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  text-shadow: 0 1px 12px rgba(0,0,0,.45) !important;
+  text-wrap: pretty !important;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+html body .event-description {
+  margin: 16px auto 0 !important;
+  background: transparent !important;
+}
+/* Override Blackthorn's inline style="text-align: justify;" on the <p>.
+   Inline styles win the specificity war against external CSS unless we use
+   !important AND a selector specific enough that the cascade picks ours. */
+html body .event-description p[style],
+html body .event-description bt-rich-text p[style],
+html body .event-description .bt-rich-text p[style],
+html body .event-description .content p[style] {
+  text-align: center !important;
+  color: rgba(255,255,255,.92) !important;
+}
+
+/* Normalize the rich-text editor's inline formatting. When you paste text into
+   Blackthorn's editor it wraps things in <strong>, <em>, <span style=...> etc.
+   This forces every nested element back to uniform body copy so the editor's
+   formatting can't fight the design. (If you ever WANT a bold lead-in, remove
+   the font-weight line and bold it in the editor.) */
+html body .event-description *,
+html body .event-description strong,
+html body .event-description b,
+html body .event-description em,
+html body .event-description i,
+html body .event-description u,
+html body .event-description span,
+html body .event-description span[style],
+html body .event-description [style],
+html body .event-description .content,
+html body .event-description .content *,
+html body .event-description .content [style] {
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-family: var(--bt-font-body) !important;
+  font-size: 16px !important;       /* beats the editor's inline font-size (e.g. 14px spans) */
+  line-height: 1.65 !important;
+  color: rgba(255,255,255,.92) !important;
+  background: transparent !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+}
+
+/* Questions form (when present) — breaks out of the hero treatment into a
+   light card so form fields are legible. */
+.event-questions-form {
+  background: var(--bt-paper) !important;
+  color: var(--bt-ink) !important;
+  border-radius: var(--bt-radius-lg) !important;
+  padding: 40px !important;
+  max-width: 720px !important;
+  margin: 48px auto !important;
+  box-shadow: 0 24px 48px -24px rgba(0,0,0,.45) !important;
+  position: relative !important;
+  z-index: 3 !important;
+}
+.event-questions-form,
+.event-questions-form * {
+  text-shadow: none !important;
+}
+.event-questions-form label {
+  color: var(--bt-ink) !important;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: 12px;
+  font-weight: 600;
+}
+.event-questions-form input,
+.event-questions-form textarea,
+.event-questions-form select {
+  color: var(--bt-ink) !important;
+  background: #fff !important;
+  border: 1px solid var(--bt-rule) !important;
+  border-radius: var(--bt-radius-sm) !important;
+  padding: 14px 16px;
+  font-family: var(--bt-font-body);
+  font-size: 15px;
+  width: 100%;
+}
+.event-questions-form input:focus,
+.event-questions-form textarea:focus,
+.event-questions-form select:focus {
+  border-color: var(--bt-accent) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(200,122,58,.16) !important;
+}
+.event-questions-form button {
+  background: var(--bt-navy) !important;
+  color: #fff !important;
+  border: 1px solid var(--bt-navy) !important;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  font-size: 14px;
+  padding: 16px 32px;
+  border-radius: var(--bt-radius-sm) !important;
+}
+.event-questions-form button:hover {
+  background: var(--bt-accent) !important;
+  border-color: var(--bt-accent) !important;
+}
+
+/* Section headings on the production page (Venue / Contact us) — white on
+   the dark hero, condensed all-caps with an orange accent underline. */
+.section-wrapper h2,
+.section h2,
+h2.title,
+bt-master-event-ui-venue h2,
+.section.venue h2,
+bt-master-event-ui-venue .title,
+main.main h2,
+main.main .title {
+  color: #fff !important;
+  text-shadow: 0 2px 16px rgba(0,0,0,.45) !important;
+  font-family: var(--bt-font-display) !important;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: .06em !important;
+  font-size: clamp(36px, 4.5vw, 64px) !important;
+  position: relative !important;
+  padding-bottom: 16px !important;
+}
+.section-wrapper h2::after,
+.section h2::after,
+h2.title::after,
+bt-master-event-ui-venue .title::after,
+main.main h2::after,
+main.main .title::after {
+  content: "" !important;
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) !important;
+  width: 56px !important;
+  height: 4px !important;
+  background: var(--bt-accent) !important;
+}
+
+/* Venue map-section card — Blackthorn renders venue details in a LIGHT card:
+   .event-location (card) > .event-location-details > .event-location-name (h3)
+   + .event-location-address, plus an .actions block. The global "white text on
+   the dark hero" rules bleed in here and turn the address white-on-white. Force
+   a readable light card with dark text. The "Venue" h2 above stays white because
+   it sits on the hero, not inside this card. */
+html body .event-location,
+html body .event-location-details {
+  background: var(--bt-paper) !important;
+  border-radius: var(--bt-radius-md) !important;
+}
+html body .event-location {
+  padding: 24px 28px !important;
+  border: 1px solid var(--bt-rule) !important;
+  box-shadow: 0 18px 44px -22px rgba(0,0,0,.55) !important;
+}
+html body .event-location-name,
+html body .event-location-name *,
+html body .event-location-details h3,
+html body .event-location-details h3 * {
+  color: var(--bt-navy) !important;
+  font-family: var(--bt-font-display) !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+html body .event-location-address,
+html body .event-location-address *,
+html body .event-location-details .event-location-address {
+  color: var(--bt-ink-soft) !important;
+  font-family: var(--bt-font-body) !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+}
+/* Directions / map action links inside the card — amber on the light card */
+/* Venue action links get amber text — EXCEPT filled/raised Material buttons,
+   which must keep a white label on the orange fill (no orange-on-orange). */
+html body .event-location .actions a:not(.mat-mdc-raised-button):not(.mat-mdc-unelevated-button):not([color="primary"]),
+html body .event-location .actions button:not(.mat-mdc-raised-button):not(.mat-mdc-unelevated-button):not([color="primary"]) {
+  color: var(--bt-accent) !important;
+  text-shadow: none !important;
+}
+html body .event-location .actions .mat-mdc-raised-button,
+html body .event-location .actions .mat-mdc-unelevated-button,
+html body .event-location .actions button[color="primary"],
+html body .event-location .actions .mat-mdc-raised-button .mdc-button__label,
+html body .event-location .actions .mat-mdc-unelevated-button .mdc-button__label {
+  color: #fff !important;
+  text-shadow: none !important;
+}
+
+/* Contact form labels — white so they're legible on the dark hero. The label
+   text is wrapped in <bt-rich-text><div class="content">. The input boxes stay
+   white (Blackthorn default) which reads fine against the dark backdrop. */
+.contact-form-outer-wrapper .field-label,
+.contact-form .field-label,
+.input-field > label,
+.name-row .field-label,
+.field-label,
+.field-label .content,
+.field-label bt-rich-text .content,
+.field-label .bt-rich-text .content {
+  color: #fff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,.5) !important;
+  background: transparent !important;
+}
+/* Section labels above the form ("Contact us") read on dark too. Note the
+   contact section uses h2.title-h2 (venue uses h2.title). */
+.contact-form-outer-wrapper h1,
+.contact-form-outer-wrapper h2,
+.contact-form-inner-wrapper h1,
+.contact-form-inner-wrapper h2,
+.title-h2,
+h2.title-h2,
+bt-contact-us-component h2 {
+  color: #fff !important;
+  text-shadow: 0 2px 16px rgba(0,0,0,.45) !important;
+}
+
+/* Contact form "Send" / submit button — solid orange chip (engagement
+   accent). Bigger and bolder than the formal template's amber. */
+.send-button,
+button.send-button,
+.contact-form .send-button,
+.button-group .send-button,
+.button-group button[type="submit"],
+form button[type="submit"].send-button {
+  background: var(--bt-accent) !important;
+  background-color: var(--bt-accent) !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: var(--bt-radius-sm) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .18em !important;
+  font-family: var(--bt-font-display) !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  padding: 16px 44px !important;
+  box-shadow: 0 8px 22px -10px rgba(0,0,0,.5) !important;
+  opacity: 1 !important;
+}
+.send-button:hover,
+button.send-button:hover {
+  background: var(--bt-accent-2) !important;
+  border-color: var(--bt-accent-2) !important;
+}
+/* Disabled state (form incomplete) — dimmed amber, still clearly visible */
+.send-button[disabled],
+.send-button.mat-button-disabled,
+button.send-button.mat-button-disabled {
+  background: rgba(200,122,58,.55) !important;
+  background-color: rgba(200,122,58,.55) !important;
+  color: rgba(255,255,255,.85) !important;
+  border-color: transparent !important;
+}
+
+/* Section dividers — engagement template replaces Blackthorn's <bt-divider>
+   (.line + .dot) with twin orange ticks on either side of a small orange
+   square. Reads as a stadium signage break, not a contemplative diamond. */
+.bt-divider .primary,
+.bt-divider .bt-divider {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  max-width: 380px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  gap: 12px !important;
+}
+.bt-divider .line {
+  background: var(--bt-accent) !important;
+  height: 3px !important;
+  flex: 1 !important;
+}
+.bt-divider .dot {
+  width: 12px !important;
+  height: 12px !important;
+  min-width: 12px !important;
+  background: var(--bt-accent) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  margin: 0 !important;
+}
+
+/* Location pin + calendar icons before the venue/date in the hero metadata.
+   Injected as masked ::before pseudo-elements so they pick up the white text
+   color (currentColor) automatically. Address is .event-where-when .venue
+   (scoped so it doesn't hit the .section.venue map block); date is .event-date. */
+.event-where-when .venue::before {
+  content: "";
+  display: inline-block;
+  width: 15px; height: 15px;
+  margin-right: 9px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z'/><circle cx='12' cy='10' r='3'/></svg>") center/contain no-repeat;
+}
+.event-date-container .event-date::before,
+.event-date::before {
+  content: "";
+  display: inline-block;
+  width: 15px; height: 15px;
+  margin-right: 9px;
+  vertical-align: -2px;
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") center/contain no-repeat;
+  mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>") center/contain no-repeat;
+}
+
+/* Header logo — Blackthorn's header has no logo slot, so inject the UVA mark
+   as a ::before on the nav-tab group. It flows inline (after the back button,
+   before the tabs) and is driven by --bt-header-logo-* vars the export bakes
+   in from the Show logo + Logo image URL settings. */
+/* The header must stay ABOVE the full-page hero content (event-details spans
+   100vh and would otherwise sit over the nav and eat clicks). Elevate the whole
+   header bar, keep it opaque navy, and guarantee nav links receive pointer
+   events. The injected logo ::before must never intercept clicks. */
+bt-master-event-ui-preview-header,
+header.navbar,
+.navbar,
+.top-nav {
+  position: relative !important;
+  z-index: 100 !important;
+  background: var(--bt-navy) !important;
+}
+.navbar-content,
+.navbar-nav {
+  position: relative !important;
+  z-index: 2 !important;
+}
+.nav-item,
+header nav a,
+.navbar-nav a,
+.back-button,
+.navbar-content button {
+  position: relative !important;
+  z-index: 2 !important;
+  pointer-events: auto !important;
+}
+.navbar-nav::before {
+  content: "";
+  display: var(--bt-header-logo-display, none);
+  width: 140px;
+  height: 38px;
+  margin-right: 22px;
+  background-image: var(--bt-header-logo-url, none);
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-size: contain;
+  flex-shrink: 0;
+  align-self: center;
+  pointer-events: none !important;  /* click-through so it never blocks the nav */
+}
+
+/* Active nav tab — clean horizontal pill, not a circle. Force consistent
+   padding so short labels ("Venue") still read as a pill. Also kill any
+   Material ripple/focus overlay that renders as an odd circle. */
+.nav-item.active,
+.nav-item[aria-selected="true"],
+header nav a.active,
+header nav a[aria-selected="true"] {
+  background: var(--bt-cream) !important;
+  color: var(--bt-navy) !important;
+  border-radius: 999px !important;
+  padding: 8px 20px !important;
+}
+.nav-item .mat-ripple,
+.nav-item .mat-mdc-focus-indicator,
+.navbar-nav .mat-ripple,
+.navbar-nav .mat-mdc-focus-indicator,
+.nav-item .mat-mdc-button-persistent-ripple {
+  display: none !important;
+}
+
+/* Mobile tweaks for the production layout */
+@media (max-width: 720px) {
+  main.main > .event-details { padding: 8vh 16px !important; min-height: 80vh !important; }
+  .event-details-container h1.event-name,
+  main.main h1.event-name { font-size: clamp(36px, 9vw, 64px) !important; }
+  .event-where-when, .event-where-when * { font-size: 13px !important; letter-spacing: .12em !important; }
+  .navbar-nav::before { width: 96px; height: 28px; margin-right: 12px; }
+}
+
+
+/* ============================================================================
+   USER CUSTOMIZATIONS — generated 7/2/2026, 2:09:21 PM
+   ============================================================================ */
+:root {
+  --bt-navy:          #232D4B;
+  --bt-navy-2:        #1e2640;
+  --bt-accent:        #E57200;
+  --bt-accent-2:      #ca6400;
+  --bt-cream:         #F4ECDD;
+  --bt-paper:         #ffffff;
+  --bt-ink:           #232D4B;
+  --bt-ink-soft:      #70778a;
+  --bt-rule:          #e5ded0;
+  --bt-font-display:  'Montserrat', 'Archivo', 'Franklin Gothic', 'Helvetica Neue', sans-serif;
+  --bt-font-secondary: 'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --bt-font-date:     'Libre Caslon Text', Georgia, 'Times New Roman', serif;
+  --bt-font-body:     'Inter', system-ui, sans-serif;
+  --bt-font-script:   'Caveat', 'Brush Script MT', cursive;
+  --bt-radius-sm:     2px;
+  --bt-hero-min-h:    88vh;
+  --bt-hero-band:     88vh;
+  --bt-hero-image:    linear-gradient(180deg, rgba(24,22,28,0.28) 0%, rgba(24,22,28,0.61) 100%), url("https://giving.virginia.edu/wp-content/uploads/2026/07/WOL26-Summer-Screen-Hero-Background-Only.jpg");
+  --bt-hero-scrim:    linear-gradient(180deg, rgba(24,22,28,0.28) 0%, rgba(24,22,28,0.61) 100%);
+  --bt-hero-logo-display: none;
+  --bt-hero-logo-h:   64px;
+  --bt-hero-logo-url: none;
+  --bt-header-logo-display: block;
+  --bt-header-logo-url: url("data:image/png;base64,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");
+}
+
+/* Headline size + weight */
+.event-name, h1.event-name, .bt-event-name h1 {
+  font-size: clamp(56px, 7.0vw, 84px) !important;
+  font-weight: 800 !important;
+}
+
+/* Custom hero image — preview's mock DOM uses a real full-bleed banner
+   element, so it gets the cover image directly. Production has no hero element
+   (main.main holds the whole page), so the image goes into --bt-hero-image and
+   is drawn as a fixed-height band by main.main::before (see base CSS). That's
+   what makes the Hero height slider actually cap the image. */
+.bt-event-banner,
+.event-banner,
+.event-hero,
+.hero-image-container,
+section.banner {
+  background-image:
+    linear-gradient(180deg, rgba(24,22,28,0.28) 0%, rgba(24,22,28,0.61) 100%),
+    url('https://giving.virginia.edu/wp-content/uploads/2026/07/WOL26-Summer-Screen-Hero-Background-Only.jpg') !important;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+/* Hide share buttons (invite-only event) */
+header button[aria-label*="share" i],
+.bt-share-button,
+.share-button,
+.hero-share,
+.event-name-section button,
+.bt-event-name button,
+.btn-wrapper,
+.btn-wrapper button,
+.social-button,
+div.social-button,
+.navbar-content .social-button,
+.event-details-container .btn-wrapper { display: none !important; }
+
+/* Eyebrow above the headline (engagement template). Renders in production
+   as a ::before on h1.event-name since Blackthorn's DOM has no eyebrow slot. */
+h1.event-name::before,
+.event-details-container h1.event-name::before,
+main.main h1.event-name::before {
+  content: "UVA Advancement" !important;
+  display: block !important;
+  font-family: var(--bt-font-secondary) !important;
+  font-weight: 400 !important;
+  font-size: clamp(14px, 1.4vw, 20px) !important;
+  letter-spacing: .22em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  opacity: .9 !important;
+  margin-bottom: 14px !important;
+  text-shadow: 0 1px 12px rgba(0,0,0,.4) !important;
+  line-height: 1.2 !important;
+}
