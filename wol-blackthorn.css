@@ -1419,32 +1419,21 @@ button.send-button.mat-button-disabled {
   border-color: transparent !important;
 }
 
-/* Section dividers — engagement template replaces Blackthorn's <bt-divider>
-   (.line + .dot) with twin orange ticks on either side of a small orange
-   square. Reads as a stadium signage break, not a contemplative diamond. */
-.bt-divider .primary,
-.bt-divider .bt-divider {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  max-width: 380px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  gap: 12px !important;
-}
+/* Section dividers — Blackthorn's <bt-divider> renders a full-width .line with
+   a center .dot. We keep the orange line and turn the dot into a small diamond
+   (rotated square) for a refined center accent instead of a blocky square. */
 .bt-divider .line {
   background: var(--bt-accent) !important;
-  height: 3px !important;
-  flex: 1 !important;
+  height: 2px !important;
 }
 .bt-divider .dot {
-  width: 12px !important;
-  height: 12px !important;
-  min-width: 12px !important;
+  width: 10px !important;
+  height: 10px !important;
+  min-width: 10px !important;
   background: var(--bt-accent) !important;
   border: 0 !important;
-  border-radius: 0 !important;
-  transform: none !important;
+  border-radius: 1px !important;
+  transform: rotate(45deg) !important;   /* square → diamond */
   box-shadow: none !important;
   margin: 0 !important;
 }
@@ -1551,7 +1540,7 @@ header nav a[aria-selected="true"] {
 
 
 /* ============================================================================
-   USER CUSTOMIZATIONS — generated 7/2/2026, 2:09:21 PM
+   USER CUSTOMIZATIONS — generated 7/6/2026, 10:23:02 AM
    ============================================================================ */
 :root {
   --bt-navy:          #232D4B;
